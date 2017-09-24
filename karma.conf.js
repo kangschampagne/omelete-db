@@ -1,5 +1,6 @@
 // Karma configuration
 // Generated on Sat Sep 23 2017 23:08:27 GMT+0800 (中国标准时间)
+var webpackConfig = require('./build/webpack.test.conf')
 
 module.exports = function (config) {
   config.set({
@@ -15,6 +16,7 @@ module.exports = function (config) {
 
     // list of files / patterns to load in the browser
     files: [
+      'src/**.js',
       'test/*spec.js'
     ],
 
@@ -26,8 +28,12 @@ module.exports = function (config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'test/*spec.js': ['babel']
+      'src/**.js': ['webpack'],
+      'test/*spec.js': ['webpack']
     },
+
+    // webpack configuration
+    webpack: webpackConfig,
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
@@ -49,14 +55,14 @@ module.exports = function (config) {
 
 
     // enable / disable watching file and executing tests whenever any file changes
-    autoWatch: true,
+    autoWatch: false,
 
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
     browsers: [
-      // 'Chrome',
-      'PhantomJS'
+      'Chrome',
+      // 'PhantomJS'
     ],
 
 
