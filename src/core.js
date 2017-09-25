@@ -23,6 +23,11 @@ class Core extends Tapable {
       .then(
         Catch(success => {
           console.log('success', success)
+          // 注册 judge 插件， 返回值为 Boolean??
+          const flag = this.applyPluginsBailResult('judge', success, opts)
+          if (flag === false) {
+            defer.reject(success)
+          }
           // resolve plugin
           this.applyPlugins('resolve', success, opts, defer)
         }, defer, opts),

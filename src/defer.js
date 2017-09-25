@@ -3,11 +3,17 @@ const noop = function () {}
 class Defer {
   constructor(...defers) {
     this.successCallback = []
+    this.failCallback = []
     this.catchCallback = []
   }
 
   done(cb) {
     this.successCallback.push(cb)
+    return this
+  }
+
+  fail(cb) {
+    this.failCallback.push(cb)
     return this
   }
 
@@ -26,6 +32,10 @@ class Defer {
 
   resolve(res, flag) {
     this.fire(this.successCallback, res, flag)
+  }
+
+  reject(res, flag) {
+    this.fire(this.failCallback, res, flag)
   }
 }
 

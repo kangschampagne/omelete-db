@@ -113,3 +113,16 @@ npm install --save-dev mocha
 >![Alt text](./2-6.png)
 > 在Cache组件中 执行resolve 插件， 获取真实错误并格式化
 >![Alt text](./2-7.png)
+
+第 3 个测试 和 第 4 个测试 只多加了一个 Jquery.Defferd对象，其他与上面一样。创建完，异步立即resolve()，暂时忽略 judge plugin，所以暂时没看明白这两个测试干嘛用的。
+> 第 3 个 ` should able to use jQuery.Defer `
+> 第 4 个 ` should able to throw error when using jQuery.Defer `
+
+第 5 个 测试用例
+> ` should able to use judge `
+> 创建一个 judge 插件，并返回 false。发起get请求，并调用fail()（这个怎么解释）
+> 所以就注册一个 judge 处理， 只要有一个能够处理，立即返回值， 测试用例中，这个只做判断，返回值为 Boolean
+>![Alt text](./5-1.png)
+> 在 Defer 中，做这个 reject， 执行所有 failCallback
+>![Alt text](./5-2.png)
+>![Alt text](./5-3.png)
