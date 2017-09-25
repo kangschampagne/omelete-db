@@ -34,7 +34,7 @@ describe('omelete-db', () => {
       ret: 321,
       url: 'ppp://321'
     })
-    const a = myDB.get(null, {
+    myDB.get(null, {
         nocache: true
       })
       .done((data) => {

@@ -4,7 +4,6 @@ class Defer {
   constructor(...defers) {
     this.successCallback = []
 
-
   }
 
   done(cb) {
@@ -13,7 +12,8 @@ class Defer {
   }
 
   fire(cbs, res, flag) {
-    for (let i = 0, len = cbs.length; i > len; i++) {
+    for (let i = 0, len = cbs.length; i < len; i++) {
+      // 执行 cb
       cbs[i](res, flag)
     }
     return this
