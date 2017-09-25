@@ -6,8 +6,10 @@ module.exports = instance => {
     if (opts.nocache === true) {
       try {
         defer.resolve(res)
-      } catch(e) {
-        throw Error('err', e)
+      } catch (e) {
+        // 输出测试 指定错误格式 => 'DB(ppp://321) xxxx is not defined'
+        e.message = `DB(${opts.url}) ${e.message}`
+        throw e
       }
     }
   })

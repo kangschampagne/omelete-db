@@ -80,20 +80,36 @@ npm install --save-dev mocha
 > 就是什么情况的返回，会调用相应的 plugin 进行解决
 
  所以第一步的测试用例是， 
->1.可以使用 tapable 并可以传入 options 
->2.可以使用 get 发起请求并携带 options 使其通过 endpoint 插件， 完成请求后返回 options 的 值。暂不使用缓存。
->![Alt text](./1.png)
+>1.可以使用 get 发起请求并携带 options 使其通过 endpoint 插件， 完成请求后返回 options 的 值。暂不使用缓存。
+>![Alt text](./1-1.png)
 >
->![Alt text](./2.png)
+>![Alt text](./1-2.png)
 >
->![Alt text](./3.png)
+>![Alt text](./1-3.png)
 >
 >这个时候需要 resolve  成功success的回调。
 >做法是：添加缓存组件。 并注册一个 resolve 的 plugin 处理结果。
->![Alt text](./4.png)
+>![Alt text](./1-4.png)
 >
->![Alt text](./5.png)
+>![Alt text](./1-5.png)
 >执行 success callback 的所有函数
 
+第二个测试用例
+> 2.should able to throw error
+> 可以使用get发起请求并携带 options 使其通过 endpoint 插件， 完成请求后， 设置抛错条件， 并在 catch 中 获取错误。
+>![Alt text](./2-1.png)
+>
+>![Alt text](./2-2.png)
+> 
+>![Alt text](./2-3.png)
+> 捕获了错误，但是没有办法抛出具体的错误， 所以使用 一个 catch 组件捕获错误，并输出。
+> 获取输出的错误格式为： `DB(ppp://321) xxxx is not defined`
+>> 尝试在 .catch() {} 中resolve请求，没有办法拿到 success callback 的参数。
+>![Alt text](./2-4.png)
 
-
+> 将 success callback 在 catch 组件中处理
+>![Alt text](./2-5.png)
+> 在Catch组件中 resolve => success callback 
+>![Alt text](./2-6.png)
+> 在Cache组件中 执行resolve 插件， 获取真实错误并格式化
+>![Alt text](./2-7.png)
