@@ -156,34 +156,171 @@ describe('omelete-db', () => {
   // })
 
   // 第 5 个 测试
-  it('should able to use judge', (done) => {
-    class XDB extends DB {
-      constructor(options) {
-        super(options)
-        this.plugin('endpoint', () => {
-          return () => {
-            return new Promise((resolve, reject) => {
-              setTimeout(() => {
-                resolve({
-                  hasError: true
+  // it('should able to use judge', (done) => {
+  //   class XDB extends DB {
+  //     constructor(options) {
+  //       super(options)
+  //       this.plugin('endpoint', () => {
+  //         return () => {
+  //           return new Promise((resolve, reject) => {
+  //             setTimeout(() => {
+  //               resolve({
+  //                 hasError: true
+  //               })
+  //             })
+  //           })
+  //         }
+  //       })
+  //       this.plugin('judge', (data) => {
+  //         if (data.hasError) return false
+  //         return true
+  //       })
+  //     }
+  //   }
+
+  //   const xDB = new XDB
+
+  //   xDB.get()
+  //     .fail(e => {
+  //       e.hasError.should.ok()
+  //       done()
+  //     })
+  // })
+
+  // 第 6 个 测试
+  // it('should able to use error plugin', (done) => {
+  //   class XDB extends DB {
+  //     constructor(options) {
+  //       super(options)
+  //       this.plugin('endpoint', () => {
+  //         return () => {
+  //           return new Promise((resolve, reject) => {
+  //             setTimeout(() => {
+  //               resolve({
+  //                 hasError: true
+  //               })
+  //             })
+  //           })
+  //         }
+  //       })
+  //       this.plugin('judge', (data) => {
+  //         if (data.hasError) return false
+  //         return true
+  //       })
+  //       this.plugin('error', (data) => {
+  //         return {
+  //           data
+  //         }
+  //       })
+  //     }
+  //   }
+
+  //   const xDB = new XDB
+
+  //   xDB.get()
+  //     .fail(e => {
+  //       e.data.hasError.should.ok()
+  //       done()
+  //     })
+  // })
+
+  // 第 7 个 测试
+  // describe('defer error', () => {
+  //   let db
+  //   before(() => {
+  //     window._ENV_ = 'dev'
+  //   })
+
+  //   it('should throw an error when have not use fail method to listen the error', (done) => {
+  //     class XDB extends DB {
+  //       constructor(options) {
+  //         super(options)
+  //         this.plugin('endpoint', () => {
+  //           return () => {
+  //             return new Promise((resolve, reject) => {
+  //               setTimeout(() => {
+  //                 resolve({
+  //                   hasError: true
+  //                 })
+  //               })
+  //             })
+  //           }
+  //         })
+  //         this.plugin('judge', (data) => {
+  //           if (data.hasError) return false
+  //           return true
+  //         })
+  //       }
+  //     }
+
+  //     const xDB = new XDB({
+  //       url: 'kk://123'
+  //     })
+
+  //     xDB.get({
+  //         nocache: true
+  //       })
+  //       .catch((e) => {
+  //         e.message.should.equal('You need use fail method to get the error: {"hasError":true}')
+  //         done()
+  //       })
+  //   })
+
+  //   after(() => {
+  //     window._ENV_ = undefined
+  //     delete window._ENV_
+  //   })
+  // })
+
+  // 第 8 个 测试
+  describe('cache default', () => {
+    let db
+    before((done) => {
+      MyDB = class My extends DB {
+        constructor(options) {
+          super(options)
+          this.plugin('endpoint', () => {
+            return () => {
+              return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                  resolve({
+                    ret: this.options.ret
+                  })
                 })
               })
-            })
+            }
+          })
+        }
+      }
+      db = new MyDB({
+        ret: 123,
+        url: 'ppp://123'
+      })
+      db.get()
+        .done((data) => {
+          data.ret.should.equal(123)
+          done()
+        })
+    })
+
+    it('should able to use cache', (done) => {
+      db.get()
+        .done((data, flag) => {
+          if (flag) {
+            flag.should.equal('CACHE')
+            data.ret.should.equal(123)
+            done()
+          } else {
+            data.ret.should.equal(123)
           }
         })
-        this.plugin('judge', (data) => {
-          if (data.hasError) return false
-          return true
-        })
-      }
-    }
+    })
 
-    const xDB = new XDB
-
-    xDB.get()
-      .fail(e => {
-        e.hasError.should.ok()
+    after((done) => {
+      setTimeout(() => {
+        localStorage.clear()
         done()
-      })
+      }, 100)
+    })
   })
 })

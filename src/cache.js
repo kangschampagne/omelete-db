@@ -3,7 +3,7 @@ import defer from './defer.js'
 module.exports = instance => {
   instance.plugin('resolve', (res, opts, defer) => {
     // if no use cache
-    if (opts.nocache === true) {
+    if (opts.nocache === true || opts.nocache === undefined) {
       try {
         defer.resolve(res)
       } catch (e) {
@@ -11,6 +11,8 @@ module.exports = instance => {
         e.message = `DB(${opts.url}) ${e.message}`
         throw e
       }
+    } else if (opts.nocache === false) {
+      // 有缓存的情况
     }
   })
 }

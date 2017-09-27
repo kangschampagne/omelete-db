@@ -24,7 +24,7 @@ class Defer {
 
   fire(cbs, res, flag) {
     for (let i = 0, len = cbs.length; i < len; i++) {
-      // 执行 cb
+      // 执行 cb3
       cbs[i](res, flag)
     }
     return this
@@ -35,6 +35,9 @@ class Defer {
   }
 
   reject(res, flag) {
+    if (window._ENV_ === 'dev') {
+      throw new Error(`You need use fail method to get the error: ${JSON.stringify(res)}`)
+    }
     this.fire(this.failCallback, res, flag)
   }
 }
