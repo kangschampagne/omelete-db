@@ -77,8 +77,8 @@ module.exports = instance => {
       }
 
       // if no use cache
-      if (opts.nocache === 'again') {
-        // nocache = 'again'
+      if (opts.nocache === 'again' && opts.lazy) {
+        console.log('lazy', res)
       } else {
         try {
           console.log('resolve', res.__flag__)
