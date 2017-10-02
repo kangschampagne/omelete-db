@@ -17,7 +17,7 @@ class Core extends Tapable {
     defer = defer || new Defer
     // 合并所有 options
     const opts = this.applyPluginsWaterfall('options', $.extend({}, this.options, options))
-    console.log('opts', opts)
+    // console.log('opts', opts)
     // 注册 endpoint 插件 如果有一个插件可以执行 则立即执行
     const endpoint = this.applyPluginsBailResult('endpoint', opts, defer)(opts)
       .then(

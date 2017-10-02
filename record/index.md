@@ -126,3 +126,82 @@ npm install --save-dev mocha
 > 在 Defer 中，做这个 reject， 执行所有 failCallback
 >![Alt text](./5-2.png)
 >![Alt text](./5-3.png)
+
+
+第 6 个 测试用例
+> ` should able to use error plugin`
+> 创建一个 error 插件，及可以处理错误事件，直接返回 data。 发起get请求，并调用fail()
+>所以注册一个 error 处理， 并处理所有的 error 插件。 
+>![Alt text](./6-1.png)
+
+
+第 7 个测试
+> `defer error` => ` should throw an error when have not use fail method to listen the error `
+> 如果没有使用 fail() 监听 错误，会抛出 一个 error
+> judge 插件返回 false。  携带opts发起 get请求， 能够使用 catch 获取错误。
+> ![Alt text](./7-1.png)
+> 其中 测试实例 中的 before中，挂载一个 `_.ENV_ = 'dev'` 对象
+> 且 failcallback 中 e.message = ' You need use fail method to get the error: {"hasError":true}'
+> 所以在 defer 的 reject() 中进行额外 的处理
+> ![Alt text](./7-2.png)
+
+
+第 8 个 测试
+> `cache default` => ` should able to use cache `
+> 可以使用 cache 缓存，
+> 设定缓存的 策略为 文章开头所述
+> 看 第一条，“默认情况下， 有缓存，成功请求应当回调两次，这样可以保证页面快速渲染，而不需要等数据返回”
+> 这个时候就需要加入 localStorage 的支持，测试模拟发起两次请求， 第二次done() 判断参数 flag，这个参数从缓存中来
+> ![Alt text](./8-1.png)
+> 在cache 中 如果 nochache没有定义 或者为 false、again则使用 localstorage，测试中调用两次
+>![Alt text](./8-2.png)
+>![Alt text](./8-3.png)
+> 思路，注册缓存组件的时候就应该 初始化 localStorage
+> 所以接下来就是 localStorage 的设计部分
+> api几个基本的函数
+> ```javascript
+> // 从 cookie 中 寻找 最新的 mid
+> const mid = function () {} 
+> 
+> // 判断环境是否支持 localStorage
+> function compat() {} 
+> 
+> // 初始化 localStorage, 并取出所有的 key
+> function init() {} 
+> 
+> // 获取 不同等级下的 key 的形式，可自定义
+> function getTarget(key, level) {}
+> 
+> // 获取 localStorage 中 对应 key 的值
+> function get(key) {}
+> 
+> // 判断 localStorage 中是否有对应的 key
+> function has(key) {}
+> 
+> // 执行保存动作，并做保存前的条件筛选，并使用 memory 进行缓存
+> function save(key, value, level = 1) {}
+> 
+> // 将数据存入 localStorage， 并做一些 存爆 的异常处理以及 数据等级处理
+> function save2Local(key, value, level, removeLevel) {}
+> 
+> // 寻找 某一数据，其同等级的所有数据，并将 key暂存，执行删除操作
+> function removeAll(key, level) {}
+>  
+> // 直接 删除 某一等级 的所有数据
+> function removeData(level) {}
+> 
+> // 遍历 keyList 中的每一项， 删除 keys中的项 和 localStorage中对应的项
+> function removeKeys(keyList) {}
+> ```
+> 在 cache 组件中
+> 注册 options 插件 和 endpoint 插件。
+> options 用于判断在localStorage中是否有这次请求的 数据，并标志 hasCache
+> endpoint 用于，取出localStorage有对应的key的数据值
+> ![Alt text](./8-4.png)
+> hasCache fromCache
+> ![Alt text](./8-5.png)
+> 则在控制台可以看到
+> ![Alt text](./8-6.png)
+> 红色为 测试请求
+> 蓝色部分为，当已经有请求则从localStorage中取数据，并发起另一次真实请求，保持数据最新。
+
