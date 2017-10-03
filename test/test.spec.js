@@ -325,52 +325,117 @@ describe('omelete-db', () => {
   // })
 
   // 第 9 个 测试
-  describe('cache lazy', () => {
-    let db
-    before((done) => {
-      MyDB = class My extends DB {
-        constructor(options) {
-          super(options)
-          this.plugin('endpoint', () => {
-            return () => {
-              return new Promise((resolve, reject) => {
-                setTimeout(() => {
-                  resolve({
-                    ret: this.options.ret
-                  })
-                })
-              })
-            }
-          })
-        }
-      }
-      db = new MyDB({
-        ret: 123,
-        url: 'ppp://123'
-      })
-      db.get()
-        .done((data) => {
-          data.ret.should.equal(123)
-          done()
-        })
-    })
+  // describe('cache lazy', () => {
+  //   let db
+  //   before((done) => {
+  //     MyDB = class My extends DB {
+  //       constructor(options) {
+  //         super(options)
+  //         this.plugin('endpoint', () => {
+  //           return () => {
+  //             return new Promise((resolve, reject) => {
+  //               setTimeout(() => {
+  //                 resolve({
+  //                   ret: this.options.ret
+  //                 })
+  //               })
+  //             })
+  //           }
+  //         })
+  //       }
+  //     }
+  //     db = new MyDB({
+  //       ret: 123,
+  //       url: 'ppp://123'
+  //     })
+  //     db.get()
+  //       .done((data) => {
+  //         data.ret.should.equal(123)
+  //         done()
+  //       })
+  //   })
 
-    it('should able to use cache', (done) => {
-      db.get(null, {
-          lazy: true
-        })
-        .done((data, flag) => {
-          flag.should.equal('CACHE')
-          data.ret.should.equal(123)
-          done()
-        })
-    })
+  //   it('should able to use cache', (done) => {
+  //     db.get(null, {
+  //         lazy: true
+  //       })
+  //       .done((data, flag) => {
+  //         flag.should.equal('CACHE')
+  //         data.ret.should.equal(123)
+  //         done()
+  //       })
+  //   })
 
-    after((done) => {
-      setTimeout(() => {
-        localStorage.clear()
-        done()
-      }, 100)
-    })
-  })
+  //   after((done) => {
+  //     setTimeout(() => {
+  //       localStorage.clear()
+  //       done()
+  //     }, 100)
+  //   })
+  // })
+
+  // 第 10 个测试用例
+  // describe('cache refresh', () => {
+  //   let db
+  //   before((done) => {
+  //     MyDB = class My extends DB {
+  //       constructor(options) {
+  //         super(options)
+  //         this.plugin('endpoint', () => {
+  //           return () => {
+  //             return new Promise((resolve, reject) => {
+  //               setTimeout(() => {
+  //                 resolve({
+  //                   ret: this.options.ret
+  //                 })
+  //               })
+  //             })
+  //           }
+  //         })
+  //       }
+  //     }
+  //     db = new MyDB({
+  //       ret: 123,
+  //       url: 'ppp://123'
+  //     })
+  //     db.get()
+  //       .done((data) => {
+  //         data.ret.should.equal(123)
+  //         done()
+  //       })
+  //   })
+
+  //   it('should able to use cache', (done) => {
+  //     db.get(null, {
+  //         refresh: 10000
+  //       })
+  //       .done((data, flag) => {
+  //         flag.should.equal('CACHE')
+  //         data.ret.should.equal(123)
+  //         done()
+  //       })
+  //   })
+
+  //   it('should able to use cache', (done) => {
+  //     db.get(null, {
+  //         refresh: 0
+  //       })
+  //       .done((data, flag) => {
+  //         if (flag) {
+  //           flag.should.equal('CACHE')
+  //           data.ret.should.equal(123)
+  //           done()
+  //         } else {
+  //           data.ret.should.equal(123)
+  //         }
+  //       })
+  //   })
+
+  //   after((done) => {
+  //     setTimeout(() => {
+  //       localStorage.clear()
+  //       done()
+  //     }, 100)
+  //   })
+  // })
 })

@@ -39,6 +39,19 @@ function fromCache(defer, options) {
       }
     }, 0)
   })
+  
+  // 如果 有 refresh 时间，且不是 lazy 的状态
+  if (options.refresh && !options.lazy) {
+    const hasCache = options.hasCache
+    // 取出 缓存中 其 储存的时间点
+    const lastTime = +hasCache.slice(hasCache.length - 13)
+    // 如果 更新时间长度 大于 其缓存到现在的时间长度
+    if (options.refresh > (+new Date - lastTime)) {
+      // 不再请求一次，直接返回 p
+      console.log('未过期', options)
+      return p
+    }
+  }
 
   this.ajax($.extend({}, options, {
     nocache: 'again',
@@ -57,6 +70,10 @@ module.exports = instance => {
     instance.plugin('options', (options) => {
       // 判断在localStrage 中是否有 数据对应的 key
       options.hasCache = hasCache(options)
+      // 如果有lazy状态，可以设置 过期请求时间，默认是一天
+      // if(options.lazy && !options.refresh) {
+      //   options.refresh = 86400000
+      // }
       return options
     })
 
@@ -65,6 +82,8 @@ module.exports = instance => {
         // 如果判断有缓存，则做获取操作
         return fromCache.bind(instance, defer)
       }
+      // 无论 是否可以 在缓存中取到值， 计算请求开始的时间点
+      // options.__start__ = +new Date
     })
 
     instance.plugin('resolve', (res, opts, defer) => {
