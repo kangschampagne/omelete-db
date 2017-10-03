@@ -24,6 +24,17 @@ function hasCache(options) {
   // 判断 nocache 是否有值， 有值返回 false
   if (options.nocache === true || options.nocache === 'again') return false
   const key = storage.has(parseKey(options), options.level)
+  // 如果 localStorage 中存在 key， 且 有 lazy状态和refresh 更新时间
+  if (key && options.lazy && options.refresh) {
+    // 取出 缓存中 其 储存的时间点
+    const lastTime = +key.slice(key.length - 13)
+    // 如果 更新时间长度 小于 其缓存到现在的时间长度
+    if (options.refresh < (+new Date - lastTime)) { 
+      // 返回 没有缓存
+      console.log('数据过期')
+      return false
+    }
+  }
   return key
 }
 
