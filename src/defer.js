@@ -4,6 +4,7 @@ class Defer {
   constructor(...defers) {
     this.successCallback = []
     this.failCallback = []
+    this.finalCallback = []
     this.catchCallback = []
   }
 
@@ -14,6 +15,11 @@ class Defer {
 
   fail(cb) {
     this.failCallback.push(cb)
+    return this
+  }
+
+  final(cb) {
+    this.finalCallback.push(cb)
     return this
   }
 
@@ -32,6 +38,7 @@ class Defer {
 
   resolve(res, flag) {
     this.fire(this.successCallback, res, flag)
+      .fire(this.finalCallback, res, flag)
   }
 
   reject(res, flag) {
@@ -39,6 +46,7 @@ class Defer {
       throw new Error(`You need use fail method to get the error: ${JSON.stringify(res)}`)
     }
     this.fire(this.failCallback, res, flag)
+      .fire(this.finalCallback, res, flag)
   }
 }
 

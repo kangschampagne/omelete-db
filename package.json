@@ -4,7 +4,8 @@
   "description": "db, learn from refly-db",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "build": "webpack --config build/webpack.proc.conf.js"
   },
   "repository": {
     "type": "git",

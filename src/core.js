@@ -33,9 +33,11 @@ class Core extends Tapable {
           // resolve plugin
           this.applyPlugins('resolve', success, opts, defer)
         }, defer, opts),
-        error => {
+        Catch(error => {
           console.log('error', error)
-        })
+          error = this.applyPluginsWaterfall('error', error, opts)
+          defer.reject(error)
+        }), defer, opts)
 
     return defer
   }
@@ -46,9 +48,17 @@ class Core extends Tapable {
     return this.ajax(options)
   }
 
-  post() {}
+  post(data = {}, options = {}) {
+    options.method = 'POST'
+    options.data = data
+    return this.ajax(options)
+  }
 
-  jsonp() {}
+  jsonp(data = {}, options = {}) {
+    options.method = 'JSONP'
+    options.data = data
+    return this.ajax(options)
+  }
 }
 
 module.exports = Core

@@ -82,9 +82,9 @@ module.exports = instance => {
       // 判断在localStrage 中是否有 数据对应的 key
       options.hasCache = hasCache(options)
       // 如果有lazy状态，可以设置 过期请求时间，默认是一天
-      // if(options.lazy && !options.refresh) {
-      //   options.refresh = 86400000
-      // }
+      if(options.lazy && !options.refresh) {
+        options.refresh = 86400000
+      }
       return options
     })
 
@@ -94,7 +94,7 @@ module.exports = instance => {
         return fromCache.bind(instance, defer)
       }
       // 无论 是否可以 在缓存中取到值， 计算请求开始的时间点
-      // options.__start__ = +new Date
+      options.__start__ = +new Date
     })
 
     instance.plugin('resolve', (res, opts, defer) => {
