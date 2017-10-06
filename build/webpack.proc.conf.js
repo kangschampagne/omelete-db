@@ -26,6 +26,16 @@ var webpackConfig = {
     }]
   },
   plugins: [
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        // warnings:false
+        properties: false,
+        drop_console: true,
+      },
+      output: {
+        ascii_only: true
+      }
+    }),
     new webpack.DefinePlugin({
       "process.env": {
         NODE_ENV: JSON.stringify("production")

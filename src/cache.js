@@ -1,6 +1,6 @@
 import defer from './defer.js'
 import storage from './storage.js'
-import $ from 'jquery'
+import _extend from 'lodash.assignin'
 
 function parseData(data) {
   if (!data) return ''
@@ -44,7 +44,7 @@ function fromCache(defer, options) {
   const p = new Promise((resolve, reject) => {
     setTimeout(() => {
       if (res) {
-        resolve($.extend({
+        resolve(_extend({
           __flag__: 'CACHE'
         }, res))
       }
@@ -64,7 +64,7 @@ function fromCache(defer, options) {
     }
   }
 
-  this.ajax($.extend({}, options, {
+  this.ajax(_extend({}, options, {
     nocache: 'again',
     hasCache: false
   }), defer)

@@ -29,6 +29,7 @@
     "karma-phantomjs-launcher": "^1.0.4",
     "karma-should": "^1.0.0",
     "karma-webpack": "^2.0.4",
+    "lodash.assignin": "^4.2.0",
     "mocha": "^3.5.3",
     "should": "^13.1.0",
     "tapable": "^0.2.8",
